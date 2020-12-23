@@ -1,0 +1,4 @@
+datasets.rrc.iiit.ac.in/KITTI/object/data_object_velodyne.zip
+datasets.rrc.iiit.ac.in/KITTI/object/data_object_image_2.zip
+datasets.rrc.iiit.ac.in/KITTI/object/data_object_label_2.zip
+datasets.rrc.iiit.ac.in/KITTI/object/data_object_calib.zip
