@@ -17,6 +17,9 @@ class KittiRCNNDataset(KittiDataset):
         if classes == 'Car':
             self.classes = ('Background', 'Car')
             aug_scene_root_dir = os.path.join(root_dir, 'KITTI', 'aug_scene')
+        elif classes == 'Box':
+            self.classes = ('Background', 'Box')
+            aug_scene_root_dir = os.path.join(root_dir, 'KITTI', 'aug_scene_box')	
         elif classes == 'People':
             self.classes = ('Background', 'Pedestrian', 'Cyclist')
         elif classes == 'Pedestrian':
