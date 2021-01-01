@@ -21,6 +21,8 @@ class GTDatabaseGenerator(KittiDataset):
         self.gt_database = None
         if classes == 'Car':
             self.classes = ('Background', 'Car')
+	elif classes == 'Box':
+	    self.classes = ('Background', 'Box')
         elif classes == 'People':
             self.classes = ('Background', 'Pedestrian', 'Cyclist')
         elif classes == 'Pedestrian':
