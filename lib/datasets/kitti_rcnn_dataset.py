@@ -65,7 +65,7 @@ class KittiRCNNDataset(KittiDataset):
         self.mode = mode
 
         if cfg.RPN.ENABLED:
-            print("inside rpn enabled")
+            # print("inside rpn enabled")
             if gt_database_dir is not None:
                 self.gt_database = pickle.load(open(gt_database_dir, 'rb'))
 
@@ -108,14 +108,14 @@ class KittiRCNNDataset(KittiDataset):
         Valid sample_id is stored in self.sample_id_list
         """
         self.logger.info('Loading %s samples from %s ...' % (self.mode, self.label_dir))
-        print("Num_sample",self.num_sample)
+        # print("Num_sample",self.num_sample)
         for idx in range(0, self.num_sample):
             sample_id = int(self.image_idx_list[idx])
             obj_list = self.filtrate_objects(self.get_label(sample_id))
             if len(obj_list) == 0:
                 self.logger.info('No gt classes: %06d' % sample_id)
                 continue
-            print(idx)
+            # print(idx)
             self.sample_id_list.append(sample_id)
 
         self.logger.info('Done: filter %s results: %d / %d\n' % (self.mode, len(self.sample_id_list),
@@ -276,7 +276,7 @@ class KittiRCNNDataset(KittiDataset):
 
         # pts_rect = pts_rect[pts_valid_flag][:, 0:3]
         pts_rect = pts_rect[:, 0:3]
-        print(len(pts_rect))
+        # print(len(pts_rect))
         # pts_intensity = pts_intensity[pts_valid_flag]
 
         if cfg.GT_AUG_ENABLED and self.mode == 'TRAIN':
@@ -305,7 +305,7 @@ class KittiRCNNDataset(KittiDataset):
             else:
                 choice = np.arange(0, len(pts_rect), dtype=np.int32)
                 if self.npoints > len(pts_rect):
-                    print("debug",len(pts_rect))
+                    # print("debug",len(pts_rect))
                     extra_choice = np.random.choice(choice, self.npoints - len(pts_rect), replace=False)
                     choice = np.concatenate((choice, extra_choice), axis=0)
                 np.random.shuffle(choice)
