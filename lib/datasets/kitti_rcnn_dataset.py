@@ -108,12 +108,14 @@ class KittiRCNNDataset(KittiDataset):
         Valid sample_id is stored in self.sample_id_list
         """
         self.logger.info('Loading %s samples from %s ...' % (self.mode, self.label_dir))
+        print("Num_sample",self.num_sample)
         for idx in range(0, self.num_sample):
             sample_id = int(self.image_idx_list[idx])
             obj_list = self.filtrate_objects(self.get_label(sample_id))
             if len(obj_list) == 0:
                 # self.logger.info('No gt classes: %06d' % sample_id)
                 continue
+            print(idx)
             self.sample_id_list.append(sample_id)
 
         self.logger.info('Done: filter %s results: %d / %d\n' % (self.mode, len(self.sample_id_list),
