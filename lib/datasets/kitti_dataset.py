@@ -21,8 +21,8 @@ class KittiDataset(torch_data.Dataset):
         self.calib_dir = os.path.join(self.imageset_dir, 'calib')
         self.label_dir = os.path.join(self.imageset_dir, 'label_2')
         self.plane_dir = os.path.join(self.imageset_dir, 'planes')
-        print(self.imageset_dir)
-        print(self.lidar_dir)
+        # print(self.imageset_dir)
+        # print(self.lidar_dir)
 
     def get_image(self, idx):
         assert False, 'DO NOT USE cv2 NOW, AVOID DEADLOCK'
@@ -41,7 +41,7 @@ class KittiDataset(torch_data.Dataset):
 
     def get_lidar(self, idx):
         lidar_file = os.path.join(self.lidar_dir, '%06d.bin' % idx)
-        print(lidar_file)
+        # print(lidar_file)
         assert os.path.exists(lidar_file)
         return np.fromfile(lidar_file, dtype=np.float32).reshape(-1, 4)
 

@@ -73,7 +73,7 @@ def create_dataloader(logger):
                               drop_last=True)
 
     if args.train_with_eval:
-        print("with test")
+        # print("with test")
         test_set = KittiRCNNDataset(root_dir=DATA_PATH, npoints=cfg.RPN.NUM_POINTS, split=cfg.TRAIN.VAL_SPLIT, mode='EVAL',
                                     logger=logger,
                                     classes=cfg.CLASSES,
@@ -82,7 +82,7 @@ def create_dataloader(logger):
         test_loader = DataLoader(test_set, batch_size=1, shuffle=True, pin_memory=True,
                                  num_workers=args.workers, collate_fn=test_set.collate_batch)
     else:
-        print("without test")
+        # print("without test")
         test_loader = None
     return train_loader, test_loader
 
