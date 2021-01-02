@@ -65,6 +65,7 @@ class KittiRCNNDataset(KittiDataset):
         self.mode = mode
 
         if cfg.RPN.ENABLED:
+            print("inside rpn enabled")
             if gt_database_dir is not None:
                 self.gt_database = pickle.load(open(gt_database_dir, 'rb'))
 
@@ -83,6 +84,7 @@ class KittiRCNNDataset(KittiDataset):
                     logger.info('Loading gt_database(%d) from %s' % (len(self.gt_database), gt_database_dir))
 
             if mode == 'TRAIN':
+                print("inside train mode preprocess training data")
                 self.preprocess_rpn_training_data()
             else:
                 self.sample_id_list = [int(sample_id) for sample_id in self.image_idx_list]
