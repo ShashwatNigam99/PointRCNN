@@ -275,6 +275,7 @@ class KittiRCNNDataset(KittiDataset):
         pts_valid_flag = self.get_valid_flag(pts_rect, pts_img, pts_rect_depth, img_shape)
 
         pts_rect = pts_rect[pts_valid_flag][:, 0:3]
+        print(len(pts_rect))
         pts_intensity = pts_intensity[pts_valid_flag]
 
         if cfg.GT_AUG_ENABLED and self.mode == 'TRAIN':
@@ -303,6 +304,7 @@ class KittiRCNNDataset(KittiDataset):
             else:
                 choice = np.arange(0, len(pts_rect), dtype=np.int32)
                 if self.npoints > len(pts_rect):
+                    print("debug",len(pts_rect))
                     extra_choice = np.random.choice(choice, self.npoints - len(pts_rect), replace=False)
                     choice = np.concatenate((choice, extra_choice), axis=0)
                 np.random.shuffle(choice)
