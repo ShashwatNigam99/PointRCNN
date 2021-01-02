@@ -113,7 +113,7 @@ class KittiRCNNDataset(KittiDataset):
             sample_id = int(self.image_idx_list[idx])
             obj_list = self.filtrate_objects(self.get_label(sample_id))
             if len(obj_list) == 0:
-                # self.logger.info('No gt classes: %06d' % sample_id)
+                self.logger.info('No gt classes: %06d' % sample_id)
                 continue
             print(idx)
             self.sample_id_list.append(sample_id)
