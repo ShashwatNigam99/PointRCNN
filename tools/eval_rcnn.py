@@ -682,6 +682,7 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
         logger.info('Averate Precision:')
         #name_to_class = {'Car': 0, 'Pedestrian': 1, 'Cyclist': 2, 'Box': 3}
         if cfg.CLASSES == 'Multiclass':
+            print("Inside Multiclass")
             name_to_class = {'Box': 0, 'Shel': 1}
             ap_result_str, ap_dict = kitti_evaluate(dataset.label_dir, final_output_dir, label_split_file=split_file,
                                                 current_class=[0,1])
