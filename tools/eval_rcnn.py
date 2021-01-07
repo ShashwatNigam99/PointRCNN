@@ -523,12 +523,17 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
             pred_classes = (norm_scores > cfg.RCNN.SCORE_THRESH).long()
         else:
             print("RCNN_CLS SHAPE",rcnn_cls.shape)
+
             pred_classes = torch.argmax(rcnn_cls, dim=2).view(-1)
+            
             cls_norm_scores = F.softmax(rcnn_cls, dim=2)
+            print("cls norm scores", cls_norm_scores.shape)
+            
             raw_scores = rcnn_cls[:,pred_classes]
-            print("cls norm scores", cls_norm_scores)
+            print("Raw scores",raw_scores.shape)
+
             norm_scores = cls_norm_scores[:, pred_classes, :]
-            print("norm scores",norm_scores)
+            print("norm scores",norm_scores.shape)
 
         # evaluation
         recalled_num = gt_num = rpn_iou = 0
@@ -596,6 +601,7 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
                 cur_sample_id = sample_id[k]
                 calib = dataset.get_calib(cur_sample_id)
                 image_shape = dataset.get_image_shape(cur_sample_id)
+                print("Saving results")
                 save_kitti_format(cur_sample_id, calib, roi_boxes3d_np[k], roi_output_dir,
                                   roi_scores_raw_np[k], image_shape)
                 save_kitti_format(cur_sample_id, calib, pred_boxes3d_np[k], refine_output_dir,
