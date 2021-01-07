@@ -614,7 +614,7 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
             for i in range(100):
                 if pred_classes[i] >= 1:
                     cur_inds.append(i)
-            print(cur_inds)
+            # print(cur_inds)
 
             pred_boxes3d_selected = pred_boxes3d[k, cur_inds]
             raw_scores_selected = raw_scores[k, cur_inds]
