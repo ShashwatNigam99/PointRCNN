@@ -10,7 +10,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--save_dir', type=str, default='./gt_database')
-parser.add_argument('--class_name', type=str, default='Car')
+parser.add_argument('--class_name', type=str, default='Multiclass')
 parser.add_argument('--split', type=str, default='train')
 args = parser.parse_args()
 
@@ -21,8 +21,8 @@ class GTDatabaseGenerator(KittiDataset):
         self.gt_database = None
         if classes == 'Car':
             self.classes = ('Background', 'Car')
-        elif classes == 'Box':
-            self.classes = ('Background', 'Box')
+        elif classes == 'Multiclass':
+            self.classes = ('Background', 'Box', 'Shel')
         elif classes == 'People':
             self.classes = ('Background', 'Pedestrian', 'Cyclist')
         elif classes == 'Pedestrian':

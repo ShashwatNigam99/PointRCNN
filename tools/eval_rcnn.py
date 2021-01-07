@@ -91,7 +91,7 @@ def save_kitti_format(sample_id, calib, bbox3d, kitti_output_dir, scores, img_sh
             print('%s -1 -1 %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f' %
                   (cfg.CLASSES, alpha, img_boxes[k, 0], img_boxes[k, 1], img_boxes[k, 2], img_boxes[k, 3],
                    bbox3d[k, 3], bbox3d[k, 4], bbox3d[k, 5], bbox3d[k, 0], bbox3d[k, 1], bbox3d[k, 2],
-                   bbox3d[k, 6], scores[k]), file=f)
+                   bbox3d[k, 6], max(scores[k])), file=f)
 
 
 def save_rpn_features(seg_result, rpn_scores_raw, pts_features, backbone_xyz, backbone_features, kitti_features_dir,
@@ -522,10 +522,10 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
             norm_scores = torch.sigmoid(raw_scores)
             pred_classes = (norm_scores > cfg.RCNN.SCORE_THRESH).long()
         else:
-            pred_classes = torch.argmax(rcnn_cls, dim=1).view(-1)
-            cls_norm_scores = F.softmax(rcnn_cls, dim=1)
-            raw_scores = rcnn_cls[:, pred_classes]
-            norm_scores = cls_norm_scores[:, pred_classes]
+            pred_classes = torch.argmax(rcnn_cls, dim=2).view(-1)
+            cls_norm_scores = F.softmax(rcnn_cls, dim=2)
+            raw_scores = rcnn_cls[:,pred_classes]
+            norm_scores = cls_norm_scores[:, pred_classes, :]
 
         # evaluation
         recalled_num = gt_num = rpn_iou = 0
@@ -602,12 +602,19 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
                 np.save(output_file, output_data.astype(np.float32))
 
         # scores thresh
-        inds = norm_scores > cfg.RCNN.SCORE_THRESH
-
+        # background vs foreground
+        #inds = norm_scores > cfg.RCNN.SCORE_THRESH
+        inds = norm_scores.max(dim=2)[0]
+        
+        cur_inds = []
         for k in range(batch_size):
-            cur_inds = inds[k].view(-1)
-            if cur_inds.sum() == 0:
-                continue
+            #cur_inds = inds[k].view(-1)
+            #if cur_inds.sum() == 0:
+            #    continue
+            for i in range(100):
+                if pred_classes[i] >= 1:
+                    cur_inds.append(i)
+            print(cur_inds)
 
             pred_boxes3d_selected = pred_boxes3d[k, cur_inds]
             raw_scores_selected = raw_scores[k, cur_inds]
@@ -673,8 +680,14 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
 
     if cfg.TEST.SPLIT != 'test':
         logger.info('Averate Precision:')
-        name_to_class = {'Car': 0, 'Pedestrian': 1, 'Cyclist': 2, 'Box': 3}
-        ap_result_str, ap_dict = kitti_evaluate(dataset.label_dir, final_output_dir, label_split_file=split_file,
+        #name_to_class = {'Car': 0, 'Pedestrian': 1, 'Cyclist': 2, 'Box': 3}
+        if cfg.CLASSES == 'Multiclass':
+            name_to_class = {'Box': 0, 'Shel': 1}
+            ap_result_str, ap_dict = kitti_evaluate(dataset.label_dir, final_output_dir, label_split_file=split_file,
+                                                current_class=[0,1])
+        else: 
+            name_to_class = {'Car': 0, 'Pedestrian': 1, 'Cyclist': 2}
+            ap_result_str, ap_dict = kitti_evaluate(dataset.label_dir, final_output_dir, label_split_file=split_file,
                                                 current_class=name_to_class[cfg.CLASSES])
         logger.info(ap_result_str)
         ret_dict.update(ap_dict)
