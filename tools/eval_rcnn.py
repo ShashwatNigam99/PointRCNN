@@ -525,7 +525,8 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
             print("RCNN_CLS SHAPE",rcnn_cls.shape)
 
             pred_classes = torch.argmax(rcnn_cls, dim=2).view(-1)
-            
+            print("Pred classes",pred_classes.shape)
+
             cls_norm_scores = F.softmax(rcnn_cls, dim=2)
             print("cls norm scores", cls_norm_scores.shape)
             
@@ -534,6 +535,11 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
 
             norm_scores = cls_norm_scores[:, pred_classes, :]
             print("norm scores",norm_scores.shape)
+
+            # RCNN_CLS SHAPE torch.Size([4, 100, 3])
+            # cls norm scores torch.Size([4, 100, 3])
+            # Raw scores torch.Size([4, 400, 3])
+            # norm scores torch.Size([4, 400, 3])
 
         # evaluation
         recalled_num = gt_num = rpn_iou = 0
