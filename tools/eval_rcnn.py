@@ -528,16 +528,16 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
         else:
             print("RCNN_CLS SHAPE",rcnn_cls.shape)
 
-            pred_classes = torch.argmax(rcnn_cls, dim=2).view(-1)
+            pred_classes = torch.argmax(rcnn_cls, dim=1).view(-1)#dim=2
             print("Pred classes",pred_classes.shape)
 
-            cls_norm_scores = F.softmax(rcnn_cls, dim=2)
+            cls_norm_scores = F.softmax(rcnn_cls, dim=1)#dim=2
             print("cls norm scores", cls_norm_scores.shape)
             
             raw_scores = rcnn_cls[:,pred_classes]
             print("Raw scores",raw_scores.shape)
 
-            norm_scores = cls_norm_scores[:, pred_classes, :]
+            norm_scores = cls_norm_scores[:, pred_classes]
             print("norm scores",norm_scores.shape)
 
             # RCNN_CLS SHAPE torch.Size([4, 100, 3])
