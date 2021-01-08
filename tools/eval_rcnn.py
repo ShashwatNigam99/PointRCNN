@@ -528,10 +528,10 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
         else:
             print("RCNN_CLS SHAPE",rcnn_cls.shape)
 
-            pred_classes = torch.argmax(rcnn_cls, dim=1).view(-1)#dim=2
+            pred_classes = torch.argmax(rcnn_cls, dim=2).view(-1)#dim=2
             print("Pred classes",pred_classes.shape)
 
-            cls_norm_scores = F.softmax(rcnn_cls, dim=1)#dim=2
+            cls_norm_scores = F.softmax(rcnn_cls, dim=2)#dim=2
             print("cls norm scores", cls_norm_scores.shape)
             
             raw_scores = rcnn_cls[:,pred_classes]
@@ -639,7 +639,7 @@ def eval_one_epoch_joint(model, dataloader, epoch_id, result_dir, logger):
             pred_boxes3d_selected = pred_boxes3d[k, cur_inds]
             raw_scores_selected = raw_scores[k, cur_inds]
             norm_scores_selected = norm_scores[k, cur_inds]
-
+            print("Raw scores selected", raw_scores_selected.shape)
             # NMS thresh
             # rotated nms
             boxes_bev_selected = kitti_utils.boxes3d_to_bev_torch(pred_boxes3d_selected)
